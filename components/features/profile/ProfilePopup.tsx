@@ -94,7 +94,7 @@ export default function ProfilePopup() {
 
                 {/* Bottom Fade Overlay for Overflow Indication */}
                 {displayGenerations.length > 1 && (
-                  <div className="absolute -bottom-4 left-0 right-0 h-20 bg-linear-to-t from-bg-card to-transparent pointer-events-none z-10" />
+                  <div className="absolute -bottom-4 left-0 right-0 h-30 bg-linear-to-t from-bg-card to-transparent pointer-events-none z-10" />
                 )}
               </div>
             </div>

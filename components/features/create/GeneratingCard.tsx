@@ -36,11 +36,19 @@ export default function GeneratingCard({
     >
       <div
         className={cn(
-          "rounded-2xl p-2.5 flex items-center gap-3.5 group transition-colors hover:bg-white/5 cursor-default relative",
+          "rounded-2xl p-2.5 flex items-center gap-3.5 group transition-colors hover:bg-white/5 cursor-default relative overflow-hidden",
           !isLatestActive && "opacity-50",
         )}
       >
-        <div className="w-[60px] h-[60px] rounded-[16px] shrink-0  overflow-hidden bg-linear-to-br from-[#1a4a44] to-[#122a3a]">
+        {/* Progress Background Fill */}
+        <motion.div
+          className="absolute inset-y-0 left-0 bg-white/5 z-0"
+          initial={{ width: "0%" }}
+          animate={{ width: `${generation.progress}%` }}
+          transition={{ ease: "easeInOut", duration: 0.5 }}
+        />
+
+        <div className="w-[60px] h-[60px] rounded-[16px] shrink-0 overflow-hidden bg-linear-to-br from-[#1a4a44] to-[#122a3a] z-10">
           <div
             className={cn(
               "absolute top-1.5 left-1.5 w-4 h-4 rounded-full bg-badge-teal",
@@ -49,7 +57,7 @@ export default function GeneratingCard({
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-badge-teal opacity-50 duration-500"></span>
           </div>
         </div>
-        <div className="flex-1 min-w-0 flex flex-col justify-center">
+        <div className="flex-1 min-w-0 flex flex-col justify-center relative z-10">
           <p
             className={cn(
               "text-[14px] font-semibold leading-relaxed truncate mt-1",
@@ -70,15 +78,15 @@ export default function GeneratingCard({
             >
               {statusText}
             </span>
-            <span
-              className={cn(
-                "text-[11px] font-bold border border-border-medium px-1.5 py-0.5 rounded-md",
-                isLatestActive ? "text-text-muted" : "text-[#555] opacity-50",
-              )}
-            >
-              {generation.version}
-            </span>
           </div>
+        </div>
+        <div
+          className={cn(
+            "text-xs border border-text-secondary px-2 py-1 rounded-lg text-text-secondary relative z-10",
+            isLatestActive ? "text-text-muted" : "text-[#555] opacity-50",
+          )}
+        >
+          {generation.version}
         </div>
       </div>
     </motion.div>

@@ -11,6 +11,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { Generation } from "@/types/generation";
 import PlayersSocial from "../player/PlayersSocial";
+import GeneratingCard from "../create/GeneratingCard";
 
 interface ProfileGenerationListProps {
   generations: Generation[];
@@ -31,7 +32,7 @@ export function ProfileGenerationList({
 }: ProfileGenerationListProps) {
   if (generations.length === 0) {
     return (
-      <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1 custom-scrollbar">
+      <div className="space-y-2 max-h-[300px] overflow-y-auto custom-scrollbar">
         <div className="text-center py-6 text-text-dark text-sm">
           No recent activity
         </div>
@@ -40,7 +41,7 @@ export function ProfileGenerationList({
   }
 
   return (
-    <div className="space-y-1.5 max-h-[380px] overflow-y-auto pr-2 pb-4 custom-scrollbar">
+    <div className="space-y-1.5 max-h-[380px] overflow-y-auto custom-scrollbar">
       <AnimatePresence mode="popLayout">
         {generations.map((gen, index) => {
           if (gen.status === "failed") {
@@ -165,80 +166,12 @@ export function ProfileGenerationList({
               </motion.div>
             );
           }
-
-          // Generating or pending
-          let statusText = "Generating";
-          if (gen.progress < 20) statusText = "Starting AI audio engine";
-          else if (gen.progress < 50) statusText = "Analyzing prompt...";
-          else if (gen.progress < 80) statusText = "Mixing audio...";
-          else statusText = "Finalizing master...";
-
-          const promptSplitIdx = Math.min(gen.prompt.length, 30);
-          const promptShort = gen.prompt.substring(0, promptSplitIdx);
-          const promptRest =
-            gen.prompt.length > promptSplitIdx
-              ? gen.prompt.substring(promptSplitIdx, 45) + "..."
-              : "";
-
-          // The most recent actively generating item should be fully opaque, older ones slightly transparent
-          const isLatestActive = index === 0;
-
           return (
-            <motion.div
+            <GeneratingCard
               key={gen.id}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <div
-                className={cn(
-                  "rounded-2xl p-2.5 flex items-center gap-3.5 group transition-colors hover:bg-white/5 cursor-default relative",
-                  !isLatestActive && "opacity-50",
-                )}
-              >
-                <div className="w-[60px] h-[60px] rounded-[16px] shrink-0 overflow-hidden bg-linear-to-br from-[#1a4a44] to-[#122a3a]">
-                  <div className="absolute top-1.5 left-1.5 w-4 h-4 rounded-full bg-badge-teal">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-badge-teal opacity-50 duration-500"></span>
-                  </div>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p
-                    className={cn(
-                      "text-[14px] font-semibold leading-relaxed truncate",
-                      isLatestActive ? "text-[#888]" : "text-[#666]",
-                    )}
-                  >
-                    {promptShort}{" "}
-                    <span
-                      className={isLatestActive ? "text-[#555]" : "text-[#444]"}
-                    >
-                      {promptRest}
-                    </span>
-                  </p>
-                  <div className="flex items-center justify-between mt-0.5">
-                    <span
-                      className={cn(
-                        "text-[13px] font-medium",
-                        isLatestActive ? "text-text-muted" : "text-[#555]",
-                      )}
-                    >
-                      {statusText}
-                    </span>
-                    <span
-                      className={cn(
-                        "text-[11px] font-bold border border-border-medium px-1.5 py-0.5 rounded-md",
-                        isLatestActive
-                          ? "text-text-muted"
-                          : "text-[#555] opacity-50",
-                      )}
-                    >
-                      {gen.version}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+              generation={gen}
+              isLatestActive={index === 0}
+            />
           );
         })}
       </AnimatePresence>

@@ -15,7 +15,7 @@ export function InsufficientCreditsAlert({
     <div className="rounded-2xl bg-[#1c1c1c] p-4 flex items-center justify-between relative mt-2 mb-2 group">
       <button
         onClick={onDismiss}
-        className="absolute -top-2 -right-2 text-[#555] hover:text-[#888] transition-colors rounded-full bg-badge-text p-0.5 h-6 w-6 flex items-center justify-center border border-badge-border opacity-0 group-hover:opacity-100"
+        className="absolute -top-2 right-0 text-[#555] hover:text-[#888] transition-colors rounded-full bg-badge-text p-0.5 h-6 w-6 flex items-center justify-center border border-badge-border opacity-0 group-hover:opacity-100"
       >
         <X className="w-3.5 h-3.5" color="#505458" />
       </button>
@@ -55,7 +55,7 @@ export function ServerBusyAlert({ onDismiss }: { onDismiss?: () => void }) {
         </div>
         <button
           onClick={onDismiss}
-          className="text-[#ef4444]/60 hover:text-[#ef4444] transition-colors absolute -top-2 -right-2 rounded-full bg-badge-text p-0.5 h-6 w-6 flex items-center justify-center border border-badge-border opacity-0 group-hover:opacity-100"
+          className="text-[#ef4444]/60 hover:text-[#ef4444] transition-colors absolute -top-2 right-0 rounded-full bg-badge-text p-0.5 h-6 w-6 flex items-center justify-center border border-badge-border opacity-0 group-hover:opacity-100"
         >
           <X className="w-3.5 h-3.5" />
         </button>
@@ -78,7 +78,7 @@ export function InvalidPromptAlert({ onDismiss }: { onDismiss?: () => void }) {
     <div className="rounded-2xl p-3 flex gap-3.5 group relative hover:bg-white/5 transition-colors mt-2 mb-2">
       <button
         onClick={onDismiss}
-        className="absolute -top-2 -right-2 text-[#555] hover:text-[#888] transition-colors rounded-full bg-badge-text p-0.5 h-6 w-6 flex items-center justify-center border border-badge-border opacity-0 group-hover:opacity-100"
+        className="absolute -top-2 right-0 text-[#555] hover:text-[#888] transition-colors rounded-full bg-badge-text p-0.5 h-6 w-6 flex items-center justify-center border border-badge-border opacity-0 group-hover:opacity-100"
       >
         <X className="w-3.5 h-3.5" color="#505458" />
       </button>
