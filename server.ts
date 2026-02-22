@@ -20,7 +20,7 @@ app.prepare().then(() => {
   const io = new Server(httpServer, {
     path: "/api/socket",
     cors: {
-      origin: "*",
+      origin: dev ? "*" : (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
       methods: ["GET", "POST"],
     },
     // Performance: prefer websocket, fallback to polling

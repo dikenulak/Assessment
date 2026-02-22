@@ -76,6 +76,8 @@ export function useAudioPlayer() {
   };
 
   const handleEnded = () => {
+    if (audioRef.current) audioRef.current.currentTime = 0;
+    setCurrentTime(0);
     togglePlay();
   };
 

@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server';
+import type { Server } from 'socket.io';
 
 // Declare global type for custom server globals
 declare global {
-  var io: any;
-  var simulateGeneration: (io: any, id: string, version: string, prompt: string) => Promise<void>;
+  var io: Server;
+  var simulateGeneration: (io: Server, id: string, version: string, prompt: string) => Promise<void>;
 }
 
 export async function POST(req: Request) {

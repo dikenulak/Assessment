@@ -44,11 +44,18 @@ export default function PromptBox() {
         socket.emit("join_generation", id);
       }
 
-      await fetch("/api/generate", {
+      const res = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt, id }),
       });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        console.error("Generation API error:", data.error ?? res.status);
+        setIsSubmitting(false);
+        return;
+      }
 
       setTimeout(() => {
         setPrompt("");
@@ -122,6 +129,9 @@ export default function PromptBox() {
               className="w-full h-full bg-transparent text-white text-base font-medium placeholder-transparent resize-none focus:outline-none z-10 relative"
               spellCheck={false}
             />
+            <span id="prompt-hint" className="sr-only">
+              Press Enter to submit. Use Shift+Enter for a new line.
+            </span>
           </div>
 
           {/* Lyrics Section */}

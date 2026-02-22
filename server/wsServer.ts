@@ -1,15 +1,11 @@
-import { Server, Socket } from "socket.io";
+import { Server } from "socket.io";
 import { EVENTS } from "../constants/events";
 
-export function setupWebSocketServer(io: Server) {
-  io.on("connection", (socket: Socket) => {
-    console.log("[WS] Client connected:", socket.id);
-
-    socket.on("disconnect", () => {
-      console.log("[WS] Client disconnected:", socket.id);
-    });
-  });
-}
+type EmitPayload =
+  | { id: string; version: string; status: string }                               // GENERATION_START
+  | { id: string; progress: number; status: string }                              // GENERATION_PROGRESS
+  | { id: string; trackTitle: string; audioUrl: string; duration: string }       // GENERATION_COMPLETE
+  | { id: string; reason: string };                                               // GENERATION_FAILED
 
 /**
  * Simulation Engine
@@ -24,7 +20,7 @@ export async function simulateGeneration(io: Server, id: string, version: string
   const shouldFail = Math.random() < 0.15; // 15% failure rate
   const failureReason = Math.random() > 0.5 ? "server_busy" : "invalid_prompt";
 
-  const emit = (event: string, data: any) => {
+  const emit = (event: string, data: EmitPayload) => {
     const room = io.sockets.adapter.rooms.get(`gen:${id}`);
     if (room && room.size > 0) {
       // Targeted: only sockets in the generation room

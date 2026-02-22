@@ -2,6 +2,9 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { Generation, GenerationStore } from '@/types/generation';
 
+// Module-level ref to clear the auto-hide notification timer
+let notificationTimeout: ReturnType<typeof setTimeout> | null = null;
+
 export const useGenerationStore = create<GenerationStore>()(
   persist(
     (set, get) => ({
@@ -19,7 +22,7 @@ export const useGenerationStore = create<GenerationStore>()(
       addGeneration: (prompt: string) => {
         // We generate ID client-side to be optimistic and consistent
         // We will send this ID to the server
-        const id = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2);
+        const id = crypto.randomUUID();
         const version = Math.random() > 0.5 ? 'v1' : 'v2';
 
         // Random gradient from token set (simulated by using css var classes or just string for now)
@@ -100,8 +103,9 @@ export const useGenerationStore = create<GenerationStore>()(
       closeMobileMenu: () => set({ isMobileMenuOpen: false }),
 
       showNotification: (notification) => {
+        if (notificationTimeout) clearTimeout(notificationTimeout);
         set({ notification });
-        setTimeout(() => set({ notification: null }), 5000);
+        notificationTimeout = setTimeout(() => set({ notification: null }), 5000);
       },
       hideNotification: () => set({ notification: null }),
 
@@ -109,20 +113,6 @@ export const useGenerationStore = create<GenerationStore>()(
         set((state) => ({ unseenCount: state.unseenCount + 1 })),
       clearUnseenCount: () => set({ unseenCount: 0 }),
 
-      // Prompt Box State
-      prompt: '',
-      lyrics: '',
-      showLyrics: false,
-      remixMode: false,
-      isFocused: false,
-      isSubmitting: false,
-
-      setPrompt: (prompt) => set({ prompt }),
-      setLyrics: (lyrics) => set({ lyrics }),
-      setShowLyrics: (showLyrics) => set({ showLyrics }),
-      setRemixMode: (remixMode) => set({ remixMode }),
-      setIsFocused: (isFocused) => set({ isFocused }),
-      setIsSubmitting: (isSubmitting) => set({ isSubmitting }),
     }),
     {
       name: 'musicgpt_generations_v1',

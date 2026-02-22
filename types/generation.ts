@@ -37,14 +37,6 @@ export interface GenerationStore {
   notification: Notification | null;
   unseenCount: number;
 
-  // Prompt Box State
-  prompt: string;
-  lyrics: string;
-  showLyrics: boolean;
-  remixMode: boolean;
-  isFocused: boolean;
-  isSubmitting: boolean;
-
   // Credits
   credits: number;
   setCredits: (credits: number) => void;
@@ -65,12 +57,4 @@ export interface GenerationStore {
   hideNotification: () => void;
   incrementUnseenCount: () => void;
   clearUnseenCount: () => void;
-
-  // Prompt Box Actions
-  setPrompt: (prompt: string) => void;
-  setLyrics: (lyrics: string) => void;
-  setShowLyrics: (show: boolean) => void;
-  setRemixMode: (remix: boolean) => void;
-  setIsFocused: (focused: boolean) => void;
-  setIsSubmitting: (submitting: boolean) => void;
 }
