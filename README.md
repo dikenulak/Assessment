@@ -264,16 +264,16 @@ Simulates AI generation lifecycle:
 
 **Implementation**: `store/useGenerationStore.ts`, `hooks/useWebSocket.ts`, `server.js`
 
-### 3. **Profile Popup**
+### 3. **Profile Popup & Dry Component Architecture**
 
-Floating dropdown with:
+Floating dropdown utilizing strict SOLID/DRY principles:
 
+- **GeneratingCard Singleton** — A singular source of truth for pending states sharing its animated SVG progress ring and background fill across all views.
 - **Gradient Avatar Ring** — Orange → Pink → Purple
 - **Credits Display** — Real-time credit balance with Top Up CTA
-- **Alert System** — Insufficient credits, server status warnings
-- **Generation Queue** — In-progress items with visual progress indicators
+- **Alert System** — Elegant alert handlers for Insufficient Credits and Server warnings.
 
-**Implementation**: `components/features/profile/ProfilePopup.tsx`
+**Implementation**: `components/features/profile/ProfilePopup.tsx`, `ProfileGenerationList.tsx`
 
 ### 4. **Sidebar Navigation**
 
@@ -288,14 +288,14 @@ Premium sidebar with:
 
 ### 5. **Floating Player**
 
-Persistent bottom player:
+Persistent bottom player with advanced dragging mechanics:
 
 - **Global State** — Survives navigation
-- **Controls** — Play/pause, skip, shuffle, repeat
-- **Progress Bar** — Visual playback indicator
-- **Queue Management** — Upcoming tracks list
+- **Native Drag Mechanics** — Custom `Slider` UI component utilizing `PointerEvent` tracking (`onPointerDown/Move/Up`) for zero-latency, buttery smooth dragging of both playback timing and volume.
+- **Responsive Layout** — Flawlessly aligns volume to the right on desktop, collapsing elegantly on mobile.
+- **Placeholder Handlers** — Primed for Next/Previous tracks.
 
-**Implementation**: `components/layout/FloatingPlayer.tsx`
+**Implementation**: `components/layout/FloatingPlayer.tsx`, `components/ui/Slider.tsx`
 
 ---
 
@@ -413,8 +413,27 @@ Client can emit:
 ### Testing Approach
 
 - **Manual Testing**: Run dev server, interact with UI
-- **Build Verification**: `npm run build` ensures no type errors
-- **Browser Testing**: Chrome DevTools for WebSocket events
+- **Build Verification**: `npm run build` ensures TypeScript safety.
+- **WebSocket Verification**: Chrome DevTools for WebSocket events mapping.
+
+---
+
+## 🗺️ Future Improvements Roadmap
+
+To bring this interface into total enterprise-level maturity, the following areas are primed for expansion:
+
+1. **Accessibility (A11y) Upgrades**:
+   - While visually polished, custom interactive elements (like the `Slider.tsx`) require `aria-valuenow`, `role="slider"`, and `onKeyDown` handlers to support keyboard navigation (Left/Right arrow keys) for screen readers.
+2. **Audio Playlist & Queue Management**:
+   - The `FloatingPlayer` currently plays a single active track. Implementing a `trackQueue: Generation[]` array in the Zustand store would allow the Next/Previous buttons to cycle through the user's recent generations.
+3. **Buffered Audio Representation**:
+   - The custom slider supports a `buffer` prop, but `useAudioPlayer` currently does not extract `audioRef.current.buffered` arrays. Extracting this would allow the progress bar to show the classic light-grey downloaded buffer ahead of the playhead.
+4. **Offline Resilience & Reconnection UX**:
+   - The `Socket.IO` instance will auto-reconnect, but surfacing a tasteful "Reconnecting..." or offline toast notification when the `socket.on("disconnect")` event fires would improve mobile UX.
+5. **Testing Suite Automation**:
+   - The codebase currently lacks a testing runner. Introducing `Playwright` for E2E user flows (verifying the player drag and prompt submission) or `Vitest` for the Zustand store logic.
+6. **Mobile Gesture Support**:
+   - Integrating Framer Motion's `drag="y"` attribute on the `FloatingPlayer` to allow mobile users to swipe the player away (dismiss) down off the screen.
 
 ---
 
