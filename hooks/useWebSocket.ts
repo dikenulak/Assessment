@@ -33,13 +33,13 @@ export function useWebSocket() {
       console.warn('[useWebSocket] Disconnected:', reason);
     }
 
-    function onStart({ id, version }: { id: string; version: string }) {
+    function onStart({ id }: { id: string; version: string }) {
       updateGeneration(id, { status: 'generating', progress: 0 });
       // Auto-join the room for this generation
       socket.emit('join_generation', id);
     }
 
-    function onProgress({ id, progress, status }: { id: string; progress: number; status: string }) {
+    function onProgress({ id, progress }: { id: string; progress: number; status: string }) {
       updateGeneration(id, { progress, status: 'generating' });
     }
 

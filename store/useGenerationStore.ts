@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { Generation, GenerationStore, Notification } from '@/types/generation';
+import { Generation, GenerationStore } from '@/types/generation';
 
 export const useGenerationStore = create<GenerationStore>()(
   persist(

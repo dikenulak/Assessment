@@ -1,6 +1,5 @@
-import { Play, Pause, SkipForward, SkipBack, X } from "lucide-react";
+import { Play, Pause, SkipForward, SkipBack } from "lucide-react";
 import { IconButton } from "@/components/ui/IconButton";
-import { Button } from "@/components/ui/Button";
 
 interface PlayerControlsProps {
   isPlaying: boolean;
@@ -15,7 +14,6 @@ export function PlayerControls({
   onPlayPause,
   onNext,
   onPrevious,
-  onClose,
 }: PlayerControlsProps) {
   return (
     <div className="flex flex-col items-center gap-2 w-full md:w-1/3 md:min-w-[240px]">

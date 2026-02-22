@@ -1,4 +1,4 @@
-import { useRef, MouseEvent } from "react";
+import { MouseEvent } from "react";
 import { cn } from "@/lib/utils";
 
 interface SliderProps {

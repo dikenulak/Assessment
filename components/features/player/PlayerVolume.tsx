@@ -1,4 +1,4 @@
-import { Volume2, VolumeX, Maximize2, MoreHorizontal, X } from "lucide-react";
+import { Volume2, VolumeX, Maximize2, X } from "lucide-react";
 import { Slider } from "@/components/ui/Slider";
 import { IconButton } from "@/components/ui/IconButton";
 import { useState } from "react";
