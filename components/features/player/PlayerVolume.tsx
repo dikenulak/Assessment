@@ -41,7 +41,7 @@ export function PlayerVolume({
         </button>
 
         <div className="w-24">
-          <Slider value={volume} onChange={onVolumeChange} className="h-1" />
+          <Slider value={volume} onChange={onVolumeChange} />
         </div>
       </div>
 

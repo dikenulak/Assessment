@@ -44,7 +44,6 @@ export function useWebSocket() {
     }
 
     function onComplete({ id, trackTitle, duration, audioUrl }: { id: string; trackTitle: string; duration: string; audioUrl: string }) {
-      const incrementUnseenCount = useGenerationStore.getState().incrementUnseenCount;
       const setCredits = useGenerationStore.getState().setCredits;
       const currentCredits = useGenerationStore.getState().credits;
 
@@ -57,7 +56,6 @@ export function useWebSocket() {
       });
 
       setCredits(Math.max(0, currentCredits - 100));
-      incrementUnseenCount();
     }
 
     function onFailed({ id, reason }: { id: string; reason: string }) {

@@ -153,10 +153,14 @@ export function ProfileGenerationList({
     );
   }
 
+  const regularGenerations = generations.filter((g) => g.status !== "failed");
+  const failedGenerations = generations.filter((g) => g.status === "failed");
+  const sortedGenerations = [...regularGenerations, ...failedGenerations];
+
   return (
     <div className="space-y-1.5 max-h-[380px] overflow-y-auto custom-scrollbar">
       <AnimatePresence mode="popLayout">
-        {generations.map(renderGenerationItem)}
+        {sortedGenerations.map(renderGenerationItem)}
       </AnimatePresence>
     </div>
   );

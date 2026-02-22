@@ -66,7 +66,7 @@ export default function GenerationCard({ generation }: GenerationCardProps) {
               <div className="w-8 h-8 rounded-full bg-white/5 backdrop-blur-md flex items-center justify-center">
                 {isCurrentPlaying ? (
                   <>
-                    <AudioLines className="w-4 h-4 text-white group-hover:hidden" />
+                    <AudioLines className="w-4 h-4 text-white group-hover:hidden animate-pulse" />
                     <Pause className="w-4 h-4 text-white fill-white hidden group-hover:block" />
                   </>
                 ) : (

@@ -33,11 +33,7 @@ export function PlayerProgress({
       <div className="flex-1 relative group py-2">
         {" "}
         {/* Added vertical padding for easier clicking */}
-        <Slider
-          value={progress}
-          onChange={handleSeek}
-          className="h-1 bg-white/20"
-        />
+        <Slider value={progress} onChange={handleSeek} />
       </div>
 
       <span className="text-xs text-text-muted font-mono min-w-[40px]">
