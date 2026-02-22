@@ -244,14 +244,40 @@ musicgpt-app/
 
 ### 1. **Animated PromptBox**
 
-The centerpiece input area features:
+The PromptBox uses a **two-phase animation system** that transitions between idle and focused states.
 
-- **Circulating Border Animation** — Canvas-based rotating gradient that flows around the border like water
-- **Focus State Transition** — Animation pauses on focus, glow appears
-- **Cycling Placeholder** — Smooth text transitions suggesting different prompts
-- **Toolbar Integration** — Attach files, remix settings, add lyrics
+#### Phase 1 — Idle: Canvas Border Trace (`AnimatedBorder.tsx`)
 
-**Implementation**: `components/features/create/PromptBox.tsx`, `components/shared/AnimatedBorder.tsx`
+When the box is **not focused**, a pure canvas animation paints a rotating conic gradient directly onto the border path using `requestAnimationFrame` at 60fps.
+
+```
+canvas → ctx.createConicGradient(angle, cx, cy)
+       → ctx.strokeStyle = gradient
+       → ctx.stroke() [rounded rect path]
+       → angle += 0.01 per frame
+```
+
+The gradient carries a flowing orange/pink highlight with transparent gaps, creating a "light tracing the border" effect. A second softened `blur(8px)` pass adds a glowing halo to the stroke.
+
+#### Phase 2 — Focused: CSS Outer Glow
+
+When the textarea is focused, `AnimatedBorder` fades out (`opacity: 0`) and a simple CSS layer fades in:
+
+```tsx
+<div
+  className="absolute -inset-1 rounded-4xl blur-3xl
+     bg-linear-to-r from-[#fc7912] via-[#ff9a44] to-[#fc7912]
+     opacity-40 scale-[1.02]"
+/>
+```
+
+This creates a soft amber bloom radiating from beneath the box edges, and the physical `border` color transitions from `border-border-input` → `border-accent-orange/40`.
+
+#### Cycling Placeholder
+
+While unfocused and empty, placeholder text cycles through prompts using `useCyclingPlaceholder` — each swap is animated via `<AnimatePresence>` with a vertical slide (`y: 10 → 0 → -10`) and opacity cross-fade over `300ms`.
+
+**Key files**: [`PromptBox.tsx`](components/features/create/PromptBox.tsx), [`AnimatedBorder.tsx`](components/shared/AnimatedBorder.tsx), [`useCyclingPlaceholder.ts`](hooks/useCyclingPlaceholder.ts)
 
 ### 2. **Real-Time Generation Tracking**
 
