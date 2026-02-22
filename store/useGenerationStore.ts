@@ -4,7 +4,7 @@ import { Generation, GenerationStore, Notification } from '@/types/generation';
 
 export const useGenerationStore = create<GenerationStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       generations: [],
       isProfileOpen: false,
       activeTrack: null,
@@ -12,6 +12,9 @@ export const useGenerationStore = create<GenerationStore>()(
       isMobileMenuOpen: false,
       notification: null,
       unseenCount: 0,
+      credits: 600,
+
+      setCredits: (credits) => set({ credits }),
 
       addGeneration: (prompt: string) => {
         // We generate ID client-side to be optimistic and consistent
@@ -25,22 +28,44 @@ export const useGenerationStore = create<GenerationStore>()(
         const gradients = ['gentle', 'passionate', 'dreamy', 'energetic'];
         const randomGrad = gradients[Math.floor(Math.random() * gradients.length)];
 
-        const newGen: Generation = {
-          id,
-          prompt,
-          promptShort: prompt.length > 28 ? prompt.slice(0, 28) + '...' : prompt,
-          version: version, // This might need to sync with server? We'll prioritize client version or update it later.
-          status: 'pending',
-          progress: 0,
-          failureReason: null,
-          createdAt: new Date(),
-          thumbnailGradient: randomGrad, // Placeholder
-        };
+        const currentCredits = get().credits;
 
-        set((state) => ({
-          generations: [newGen, ...state.generations],
-          isProfileOpen: true, // Auto-open profile on generate? User didn't specify, but good UX.
-        }));
+        if (currentCredits >= 100) {
+          const newGen: Generation = {
+            id,
+            prompt,
+            promptShort: prompt.length > 28 ? prompt.slice(0, 28) + '...' : prompt,
+            version: version,
+            status: 'pending',
+            progress: 0,
+            failureReason: null,
+            createdAt: new Date(),
+            thumbnailGradient: randomGrad,
+          };
+
+          set((state) => ({
+            generations: [newGen, ...state.generations]
+          }));
+        } else {
+          const failedGen: Generation = {
+            id,
+            prompt,
+            promptShort: prompt.length > 28 ? prompt.slice(0, 28) + '...' : prompt,
+            version: version,
+            status: 'failed',
+            progress: 0,
+            failureReason: 'insufficient_credits',
+            createdAt: new Date(),
+            thumbnailGradient: randomGrad,
+          };
+
+          set((state) => ({
+            generations: [failedGen, ...state.generations],
+            unseenCount: state.unseenCount + 1,
+            isProfileOpen: true,
+          }));
+          return null; // Signals failure to components
+        }
 
         return id;
       },
@@ -54,6 +79,8 @@ export const useGenerationStore = create<GenerationStore>()(
       removeGeneration: (id) => set((state) => ({
         generations: state.generations.filter((g) => g.id !== id)
       })),
+
+      clearAllGenerations: () => set({ generations: [] }),
 
       toggleProfile: () => set((state) => {
         const isOpen = !state.isProfileOpen;

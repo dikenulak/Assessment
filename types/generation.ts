@@ -45,10 +45,15 @@ export interface GenerationStore {
   isFocused: boolean;
   isSubmitting: boolean;
 
+  // Credits
+  credits: number;
+  setCredits: (credits: number) => void;
+
   // Actions
-  addGeneration: (prompt: string) => string;
+  addGeneration: (prompt: string) => string | null;
   updateGeneration: (id: string, updates: Partial<Generation>) => void;
   removeGeneration: (id: string) => void;
+  clearAllGenerations: () => void;
   toggleProfile: () => void;
   closeProfile: () => void;
   playTrack: (track: Generation) => void;

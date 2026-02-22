@@ -17,6 +17,8 @@ export default function ScenarioDebugger() {
     // 1. Create a dummy generation
     const id = addGeneration(`Simulating: ${label}`);
 
+    if (!id) return; // if it failed immediately (e.g. out of credits), don't proceed
+
     // 2. Immediately mark it as failed with the specific reason
     setTimeout(() => {
       updateGeneration(id, {
@@ -26,6 +28,9 @@ export default function ScenarioDebugger() {
       incrementUnseenCount();
     }, 500);
   };
+  const clearAllGenerations = useGenerationStore(
+    (state) => state.clearAllGenerations,
+  );
 
   return (
     <div className="mt-12 p-4 bg-white/5 border border-white/10 rounded-2xl max-w-3xl mx-auto flex flex-col gap-3">
@@ -52,6 +57,9 @@ export default function ScenarioDebugger() {
           onClick={() => triggerScenario("invalid_prompt", "Bad Rules")}
         >
           Simulate: Invalid Prompt
+        </Button>
+        <Button variant="secondary" onClick={clearAllGenerations}>
+          Simulate: Clear All Generations
         </Button>
       </div>
     </div>

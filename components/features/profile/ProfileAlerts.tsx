@@ -1,12 +1,16 @@
 "use client";
 
 import { AlertTriangle, X } from "lucide-react";
+import { useGenerationStore } from "@/store/useGenerationStore";
 
 export function InsufficientCreditsAlert({
   onDismiss,
 }: {
   onDismiss?: () => void;
 }) {
+  const credits = useGenerationStore((state) => state.credits);
+  const setCredits = useGenerationStore((state) => state.setCredits);
+
   return (
     <div className="rounded-2xl bg-[#1c1c1c] p-4 flex items-center justify-between relative mt-2 mb-2">
       <button
@@ -22,11 +26,17 @@ export function InsufficientCreditsAlert({
             Insufficient credits
           </h4>
           <p className="text-[#aaa] text-[13px] mt-0.5">
-            Your credit balance : 0
+            Your credit balance : {credits}
           </p>
         </div>
       </div>
-      <button className="h-8 px-4 border border-[#444] rounded-full text-white text-[13px] font-semibold hover:bg-white/5 transition-colors shrink-0">
+      <button
+        onClick={() => {
+          setCredits(600);
+          if (onDismiss) onDismiss();
+        }}
+        className="h-8 px-4 border border-[#444] rounded-full text-white text-[13px] font-semibold hover:bg-white/5 transition-colors shrink-0"
+      >
         Top Up
       </button>
     </div>

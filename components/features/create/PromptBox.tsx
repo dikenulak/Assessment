@@ -33,6 +33,11 @@ export default function PromptBox() {
     try {
       const id = addGeneration(prompt);
 
+      if (!id) {
+        setIsSubmitting(false);
+        return;
+      }
+
       // Join the WebSocket room for this generation
       const socket = getSocket();
       if (socket.emit) {
