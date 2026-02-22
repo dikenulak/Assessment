@@ -4,7 +4,7 @@ export type GenerationStatus =
   | "completed"    // WS complete event
   | "failed";      // WS error event
 
-export type FailureReason = 'server_busy' | 'invalid_prompt' | 'network_error' | null;
+export type FailureReason = 'server_busy' | 'invalid_prompt' | 'network_error' | 'insufficient_credits' | null;
 
 export interface Generation {
   id: string;
@@ -33,7 +33,9 @@ export interface GenerationStore {
   isProfileOpen: boolean;
   activeTrack: Generation | null;
   isPlaying: boolean;
+  isMobileMenuOpen: boolean;
   notification: Notification | null;
+  unseenCount: number;
 
   // Prompt Box State
   prompt: string;
@@ -46,13 +48,18 @@ export interface GenerationStore {
   // Actions
   addGeneration: (prompt: string) => string;
   updateGeneration: (id: string, updates: Partial<Generation>) => void;
+  removeGeneration: (id: string) => void;
   toggleProfile: () => void;
   closeProfile: () => void;
   playTrack: (track: Generation) => void;
   togglePlay: () => void;
   closePlayer: () => void;
+  toggleMobileMenu: () => void;
+  closeMobileMenu: () => void;
   showNotification: (notification: Notification) => void;
   hideNotification: () => void;
+  incrementUnseenCount: () => void;
+  clearUnseenCount: () => void;
 
   // Prompt Box Actions
   setPrompt: (prompt: string) => void;

@@ -1,14 +1,20 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { useGenerationStore } from "@/store/useGenerationStore";
 import GenerationCard from "./GenerationCard";
+import GenerationSkeleton from "./GenerationSkeleton";
 import { Music } from "lucide-react";
 
 export default function RecentGenerations() {
   const generations = useGenerationStore((state) => state.generations);
 
-  if (generations.length === 0) {
+  // Filter out failed generations as per user request
+  const visibleGenerations = generations.filter(
+    (gen) => gen.status !== "failed",
+  );
+
+  if (visibleGenerations.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center opacity-50">
         <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4">
@@ -31,9 +37,13 @@ export default function RecentGenerations() {
       </h2>
       <div className="grid gap-3">
         <AnimatePresence initial={false} mode="popLayout">
-          {generations.map((gen, i) => (
-            <GenerationCard key={gen.id} generation={gen} index={i} />
-          ))}
+          {visibleGenerations.map((gen, i) => {
+            if (gen.status === "completed") {
+              return <GenerationCard key={gen.id} generation={gen} index={i} />;
+            }
+            // Show skeleton for pending or generating
+            return <GenerationSkeleton key={gen.id} />;
+          })}
         </AnimatePresence>
       </div>
     </div>

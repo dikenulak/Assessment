@@ -44,7 +44,7 @@ export function useWebSocket() {
     }
 
     function onComplete({ id, trackTitle, duration, audioUrl }: { id: string; trackTitle: string; duration: string; audioUrl: string }) {
-      const showNotification = useGenerationStore.getState().showNotification;
+      const incrementUnseenCount = useGenerationStore.getState().incrementUnseenCount;
 
       updateGeneration(id, {
         status: 'completed',
@@ -54,27 +54,15 @@ export function useWebSocket() {
         audioUrl,
       });
 
-      showNotification({
-        id: `completion-${id}`,
-        type: 'success',
-        title: '🎉 Track Generated!',
-        message: `"${trackTitle}" is ready to play`,
-      });
+      incrementUnseenCount();
     }
 
     function onFailed({ id, reason }: { id: string; reason: string }) {
-      const showNotification = useGenerationStore.getState().showNotification;
+      const incrementUnseenCount = useGenerationStore.getState().incrementUnseenCount;
 
       updateGeneration(id, { status: 'failed', failureReason: reason as any });
 
-      showNotification({
-        id: `failure-${id}`,
-        type: 'error',
-        title: 'Generation Failed',
-        message: reason === 'server_busy'
-          ? 'Server is busy. Please try again.'
-          : 'Invalid prompt. Please refine your description.',
-      });
+      incrementUnseenCount();
     }
 
     // Connect if not already connected
