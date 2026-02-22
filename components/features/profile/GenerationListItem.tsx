@@ -34,7 +34,7 @@ export default function GenerationListItem({
       {/* Thumbnail */}
       <div
         className={cn(
-          "w-10 h-10 rounded-lg overflow-hidden relative flex-shrink-0 flex items-center justify-center text-[10px] font-bold text-white shadow-inner",
+          "w-10 h-10 rounded-lg overflow-hidden relative shrink-0 flex items-center justify-center text-[10px] font-bold text-white shadow-inner",
           status === "generating" ? getGradientClass(progress) : "bg-[#222]",
         )}
       >
