@@ -301,6 +301,65 @@ Floating dropdown utilizing strict SOLID/DRY principles:
 
 **Implementation**: `components/features/profile/ProfilePopup.tsx`, `ProfileGenerationList.tsx`
 
+### 3b. **Credits System**
+
+The credits system simulates a real-world usage-gated generation flow end-to-end.
+
+#### Initial Balance
+
+Credits are stored in the Zustand store and **persisted to `localStorage`** across sessions:
+
+```ts
+// useGenerationStore.ts
+credits: 600; // default starting balance
+```
+
+#### Generation Gate (Pre-flight check)
+
+Before a new generation is added to the queue, `addGeneration()` checks the balance:
+
+```ts
+if (currentCredits >= 100) {
+  // Add pending generation — proceed normally
+} else {
+  // Short-circuit: immediately create a 'failed' entry
+  // with failureReason: 'insufficient_credits'
+  // and auto-open the Profile Popup to surface the error
+  set({ generations: [failedGen, ...], isProfileOpen: true });
+  return null; // signals PromptBox to abort the fetch
+}
+```
+
+This means an API call is **never made** when the balance is too low — the failure is handled entirely client-side for instant feedback.
+
+#### Deduction on Completion
+
+Credits are only deducted when a generation **successfully completes**, via the WebSocket `GENERATION_COMPLETE` handler:
+
+```ts
+// useWebSocket.ts → onComplete()
+setCredits(Math.max(0, currentCredits - 100));
+```
+
+The `Math.max(0, ...)` guard prevents the balance going negative.
+
+#### Top Up (Simulated Reset)
+
+The **Top Up** button in `ProfileCredits.tsx` is a simulated payment action that instantly resets the balance to the maximum:
+
+```ts
+// Clicking "Top Up →" calls:
+setCredits(600);
+```
+
+In a production app this would open a payment flow; here it provides a convenient testing reset without needing to reload the app.
+
+#### Insufficient Credits Alert
+
+When a generation fails due to low credits, `ProfileGenerationList.tsx` renders an `<InsufficientCreditsAlert>` component with an inline **Top Up** CTA, directing the user back to the credits bar.
+
+**Key files**: [`useGenerationStore.ts`](store/useGenerationStore.ts), [`ProfileCredits.tsx`](components/features/profile/ProfileCredits.tsx), [`useWebSocket.ts`](hooks/useWebSocket.ts), [`ProfileAlerts.tsx`](components/features/profile/ProfileAlerts.tsx)
+
 ### 4. **Sidebar Navigation**
 
 Premium sidebar with:
