@@ -1,29 +1,18 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  Play,
-  Pause,
-  ThumbsUp,
-  ThumbsDown,
-  MoreHorizontal,
-} from "lucide-react";
+import { Play, Pause, AudioLines } from "lucide-react";
 import { Generation } from "@/types/generation";
 import { useGenerationStore } from "@/store/useGenerationStore";
-import { IconButton } from "@/components/ui/IconButton";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import PlayersSocial from "../player/PlayersSocial";
 
 interface GenerationCardProps {
   generation: Generation;
-  index: number;
 }
 
-export default function GenerationCard({
-  generation,
-  index,
-}: GenerationCardProps) {
+export default function GenerationCard({ generation }: GenerationCardProps) {
   const { status, prompt, trackTitle, version } = generation;
   const playTrack = useGenerationStore((state) => state.playTrack);
   const togglePlay = useGenerationStore((state) => state.togglePlay);
@@ -49,7 +38,7 @@ export default function GenerationCard({
       layout
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="group relative px-2 py-2 rounded-2xl transition-all duration-500 hover:bg-[#1A1A1A] max-w-3xl"
+      className="group relative px-2 py-2.5 rounded-2xl transition-all duration-500 hover:bg-[#1A1A1A] max-w-3xl"
     >
       <div className="flex items-center gap-4 relative z-10">
         {/* Thumbnail / Play Button */}
@@ -72,13 +61,18 @@ export default function GenerationCard({
           {/* Overlay Play Button on Hover */}
           {status === "completed" && (
             <div
-              className={`absolute inset-0 flex items-center justify-center transition-colors ${isCurrentPlaying ? "bg-black/50" : "bg-black/30 group-hover:bg-black/50"}`}
+              className={`absolute inset-0 flex items-center justify-center transition-colors ${isCurrentPlaying ? "bg-black/50" : "bg-black/30 opacity-0 group-hover:opacity-100"}`}
             >
-              {isCurrentPlaying ? (
-                <Pause className="w-5 h-5 text-white fill-white" />
-              ) : (
-                <Play className="w-5 h-5 text-white opacity-0 group-hover:opacity-100 transition-opacity fill-white" />
-              )}
+              <div className="w-8 h-8 rounded-full bg-white/5 backdrop-blur-md flex items-center justify-center">
+                {isCurrentPlaying ? (
+                  <>
+                    <AudioLines className="w-4 h-4 text-white group-hover:hidden" />
+                    <Pause className="w-4 h-4 text-white fill-white hidden group-hover:block" />
+                  </>
+                ) : (
+                  <Play className="w-4 h-4 text-white fill-white ml-0.5 relative z-10" />
+                )}
+              </div>
             </div>
           )}
         </div>
@@ -93,8 +87,19 @@ export default function GenerationCard({
           </p>
         </div>
 
-        {/* Actions (Only visible on hover in the pill design, or right aligned) */}
-        <PlayersSocial version={version} size="md" />
+        {/* Actions (Only visible on hover) */}
+        <div
+          className={cn(
+            "transition-opacity",
+            isCurrentTrack
+              ? "opacity-100"
+              : "opacity-0 group-hover:opacity-100",
+          )}
+        >
+          <div className="absolute top-4 right-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2 pr-2 pb-2 bg-linear-to-l from-bg-card to-bg-card/70 duration-500">
+            <PlayersSocial version={version} size="md" />
+          </div>
+        </div>
       </div>
     </motion.div>
   );

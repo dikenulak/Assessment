@@ -1,18 +1,41 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useGenerationStore } from "@/store/useGenerationStore";
 import GenerationCard from "./GenerationCard";
+import GeneratingCard from "./GeneratingCard";
 import GenerationSkeleton from "./GenerationSkeleton";
 import { Music } from "lucide-react";
 
 export default function RecentGenerations() {
   const generations = useGenerationStore((state) => state.generations);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    // Artificial small delay to show skeleton if needed, or simply wait for hydration
+    const timer = setTimeout(() => setIsLoaded(true), 800);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Filter out failed generations as per user request
   const visibleGenerations = generations.filter(
     (gen) => gen.status !== "failed",
   );
+
+  if (!isLoaded) {
+    return (
+      <div className="space-y-4">
+        <h2 className="text-lg font-semibold text-text-secondary">
+          Recent generations
+        </h2>
+        <div className="grid gap-3">
+          <GenerationSkeleton />
+          <GenerationSkeleton />
+        </div>
+      </div>
+    );
+  }
 
   if (visibleGenerations.length === 0) {
     return (
@@ -39,10 +62,16 @@ export default function RecentGenerations() {
         <AnimatePresence initial={false} mode="popLayout">
           {visibleGenerations.map((gen, i) => {
             if (gen.status === "completed") {
-              return <GenerationCard key={gen.id} generation={gen} index={i} />;
+              return <GenerationCard key={gen.id} generation={gen} />;
             }
-            // Show skeleton for pending or generating
-            return <GenerationSkeleton key={gen.id} />;
+            // Show custom active state similar to profile popup
+            return (
+              <GeneratingCard
+                key={gen.id}
+                generation={gen}
+                isLatestActive={i === 0}
+              />
+            );
           })}
         </AnimatePresence>
       </div>

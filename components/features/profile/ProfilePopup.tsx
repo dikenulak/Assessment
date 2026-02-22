@@ -81,15 +81,22 @@ export default function ProfilePopup() {
 
               <hr className="border-[#222]" />
 
-              {/* List of Generations */}
-              <ProfileGenerationList
-                generations={displayGenerations}
-                activeTrack={activeTrack}
-                isPlaying={isPlaying}
-                togglePlay={togglePlay}
-                playTrack={playTrack}
-                removeGeneration={removeGeneration}
-              />
+              <div className="relative flex-1">
+                {/* List of Generations */}
+                <ProfileGenerationList
+                  generations={displayGenerations}
+                  activeTrack={activeTrack}
+                  isPlaying={isPlaying}
+                  togglePlay={togglePlay}
+                  playTrack={playTrack}
+                  removeGeneration={removeGeneration}
+                />
+
+                {/* Bottom Fade Overlay for Overflow Indication */}
+                {displayGenerations.length > 1 && (
+                  <div className="absolute -bottom-4 left-0 right-0 h-20 bg-linear-to-t from-bg-card to-transparent pointer-events-none z-10" />
+                )}
+              </div>
             </div>
           </motion.div>
         </>

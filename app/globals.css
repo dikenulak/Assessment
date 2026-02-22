@@ -2,7 +2,7 @@
 
 @theme {
   /* Backgrounds */
-  --color-bg-page: #0a0a0a;
+  --color-bg-page: #0a0c0d;
   --color-bg-sidebar: #111111;
   --color-bg-card: #1a1a1a;
   --color-bg-popup: #161616;
@@ -29,7 +29,7 @@
   --color-text-primary: #ffffff;
   --color-text-secondary: #e4e6e8;
   --color-text-tertiary: #cccccc;
-  --color-text-muted: #666666; /* standardized from #898c92/#666 */
+  --color-text-muted: #898c92; /* standardized from #898c92/#666 */
   --color-text-subtle: #888888;
   --color-text-dark: #555555;
   --color-text-error: #f87171;

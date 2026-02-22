@@ -12,12 +12,12 @@ export function InsufficientCreditsAlert({
   const setCredits = useGenerationStore((state) => state.setCredits);
 
   return (
-    <div className="rounded-2xl bg-[#1c1c1c] p-4 flex items-center justify-between relative mt-2 mb-2">
+    <div className="rounded-2xl bg-[#1c1c1c] p-4 flex items-center justify-between relative mt-2 mb-2 group">
       <button
         onClick={onDismiss}
-        className="absolute top-2 right-2 text-[#555] hover:text-[#888] transition-colors rounded-full bg-[#111] p-0.5"
+        className="absolute -top-2 -right-2 text-[#555] hover:text-[#888] transition-colors rounded-full bg-badge-text p-0.5 h-6 w-6 flex items-center justify-center border border-badge-border opacity-0 group-hover:opacity-100"
       >
-        <X className="w-3.5 h-3.5" />
+        <X className="w-3.5 h-3.5" color="#505458" />
       </button>
       <div className="flex items-start gap-2.5 flex-1 pr-8">
         <AlertTriangle className="w-[18px] h-[18px] text-accent-yellow shrink-0 mt-0.5" />
@@ -35,7 +35,7 @@ export function InsufficientCreditsAlert({
           setCredits(600);
           if (onDismiss) onDismiss();
         }}
-        className="h-8 px-4 border border-[#444] rounded-full text-white text-[13px] font-semibold hover:bg-white/5 transition-colors shrink-0"
+        className="h-8 px-3 border border-[#444] rounded-[10px] text-white text-sm font-semibold hover:bg-white/5 transition-colors shrink-0"
       >
         Top Up
       </button>
@@ -45,7 +45,7 @@ export function InsufficientCreditsAlert({
 
 export function ServerBusyAlert({ onDismiss }: { onDismiss?: () => void }) {
   return (
-    <div className="rounded-xl bg-[#381a1a] p-3.5 mt-2 mb-2">
+    <div className="rounded-xl bg-[#381a1a] p-3.5 mt-2 mb-2 relative group">
       <div className="flex items-center justify-between mb-1">
         <div className="flex items-center gap-2">
           <AlertTriangle className="w-[18px] h-[18px] text-[#ef4444]" />
@@ -55,7 +55,7 @@ export function ServerBusyAlert({ onDismiss }: { onDismiss?: () => void }) {
         </div>
         <button
           onClick={onDismiss}
-          className="text-[#ef4444]/60 hover:text-[#ef4444] transition-colors"
+          className="text-[#ef4444]/60 hover:text-[#ef4444] transition-colors absolute -top-2 -right-2 rounded-full bg-badge-text p-0.5 h-6 w-6 flex items-center justify-center border border-badge-border opacity-0 group-hover:opacity-100"
         >
           <X className="w-3.5 h-3.5" />
         </button>
@@ -78,9 +78,9 @@ export function InvalidPromptAlert({ onDismiss }: { onDismiss?: () => void }) {
     <div className="rounded-2xl p-3 flex gap-3.5 group relative hover:bg-white/5 transition-colors mt-2 mb-2">
       <button
         onClick={onDismiss}
-        className="absolute top-2 right-2 text-[#555] hover:text-[#888] transition-colors rounded-full bg-[#222] p-0.5 opacity-0 group-hover:opacity-100"
+        className="absolute -top-2 -right-2 text-[#555] hover:text-[#888] transition-colors rounded-full bg-badge-text p-0.5 h-6 w-6 flex items-center justify-center border border-badge-border opacity-0 group-hover:opacity-100"
       >
-        <X className="w-3.5 h-3.5" />
+        <X className="w-3.5 h-3.5" color="#505458" />
       </button>
       <div className="w-[72px] h-[72px] rounded-[16px] shrink-0 bg-accent-yellow flex items-center justify-center text-3xl shadow-inner">
         🥲
@@ -97,11 +97,11 @@ export function InvalidPromptAlert({ onDismiss }: { onDismiss?: () => void }) {
         <div className="flex items-center gap-2 mt-3">
           <button
             onClick={onDismiss}
-            className="h-8 px-4 border border-[#333] hover:border-[#555] rounded-full text-[#ccc] hover:text-white text-[13px] font-medium transition-colors"
+            className="h-8 px-4 border border-[#333] hover:border-[#555] rounded-xl text-text-muted hover:text-white text-[13px] font-medium transition-colors"
           >
             Retry
           </button>
-          <button className="h-8 px-4 border border-[#333] hover:border-[#555] rounded-full text-[#ccc] hover:text-white text-[13px] font-medium transition-colors">
+          <button className="h-8 px-4 border border-[#333] hover:border-[#555] rounded-xl text-text-muted hover:text-white text-[13px] font-medium transition-colors">
             Copy prompt
           </button>
         </div>
