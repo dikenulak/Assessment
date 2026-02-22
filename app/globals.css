@@ -1,26 +1,102 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Backgrounds */
+  --color-bg-page: #0a0a0a;
+  --color-bg-sidebar: #111111;
+  --color-bg-card: #1a1a1a;
+  --color-bg-popup: #161616;
+  --color-bg-input: #1e1e1e;
+  --color-bg-hover: #252525;
+  --color-bg-active: #1f1f1f;
+  --color-bg-hover-dark: #191919;
+  --color-bg-surface: #141414;
+
+  /* Accent Colors */
+  --color-accent-orange: #f97316; /* updated to tailwind orange-500 approx matching glow */
+  --color-accent-orange-dim: #7c3800;
+  --color-accent-purple: #7c3aed;
+  --color-accent-pink: #c800ff;
+  --color-accent-yellow: #eab308;
+  --color-accent-red: #dc2626;
+  --color-accent-green: #22c55e;
+  --color-promo-start: #4a2040;
+  --color-promo-end: #252030;
+  --color-badge-teal: #6bffac;
+  --color-badge-text: #16191c;
+
+  /* Typography */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #e4e6e8;
+  --color-text-tertiary: #cccccc;
+  --color-text-muted: #666666; /* standardized from #898c92/#666 */
+  --color-text-subtle: #888888;
+  --color-text-dark: #555555;
+  --color-text-error: #f87171;
+  --color-icon-muted: #777777;
+
+  /* Borders */
+  --color-border-subtle: rgba(255, 255, 255, 0.06);
+  --color-border-card: rgba(255, 255, 255, 0.1);
+  --color-border-layout: #1f1f1f;
+  --color-border-input: #2a2a2a;
+  --color-border-input-hover: #3a3a3a;
+  --color-border-medium: #333333;
+  --color-border-dark: #444444;
+  --color-border-focus: #555555;
+  --color-border-base: #222222;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Custom Utilities for gradients and shadows */
+@utility bg-grad-avatar-ring {
+  background-image: linear-gradient(
+    135deg,
+    var(--color-accent-orange),
+    var(--color-accent-pink)
+  );
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@utility shadow-popup {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+@utility shadow-glow-orange {
+  box-shadow:
+    0 0 30px rgba(249, 115, 22, 0.35),
+    0 0 60px rgba(249, 115, 22, 0.15);
+}
+
+/* Specific Progress Gradients (v4 syntax) */
+@utility bg-grad-progress-0 {
+  background-image: linear-gradient(135deg, #1f1f1f, #2d1a1a);
+}
+@utility bg-grad-progress-25 {
+  background-image: linear-gradient(135deg, #381212, #5e1b2e);
+}
+@utility bg-grad-progress-50 {
+  background-image: linear-gradient(135deg, #2e1065, #4c1d95);
+}
+@utility bg-grad-progress-75 {
+  background-image: linear-gradient(180deg, #6366f1, #3b82f6);
+}
+@utility bg-grad-progress-90 {
+  background-image: linear-gradient(135deg, #db2777, #4f46e5);
+}
+@utility bg-grad-progress-100 {
+  background-image: linear-gradient(
+    180deg,
+    #2dd4bf,
+    #f472b6
+  ); /* Teal to Pink/Orange approx */
+}
+
+@layer utilities {
+  .animate-spin-slow {
+    animation: spin 3s linear infinite;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--color-text-primary);
+  background: var(--color-bg-page);
 }
