@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useGenerationStore } from "@/store/useGenerationStore";
+import { Generation } from "@/types/generation";
 import GenerationCard from "./GenerationCard";
 import GeneratingCard from "./GeneratingCard";
 import GenerationSkeleton from "./GenerationSkeleton";
@@ -22,6 +23,23 @@ export default function RecentGenerations() {
   const visibleGenerations = generations.filter(
     (gen) => gen.status !== "failed",
   );
+
+  const renderGenerationItem = (gen: Generation, i: number) => {
+    switch (gen.status) {
+      case "completed":
+        return <GenerationCard key={gen.id} generation={gen} />;
+      case "generating":
+      case "pending":
+      default:
+        return (
+          <GeneratingCard
+            key={gen.id}
+            generation={gen}
+            isLatestActive={i === 0}
+          />
+        );
+    }
+  };
 
   if (!isLoaded) {
     return (
@@ -60,19 +78,7 @@ export default function RecentGenerations() {
       </h2>
       <div className="grid gap-3">
         <AnimatePresence initial={false} mode="popLayout">
-          {visibleGenerations.map((gen, i) => {
-            if (gen.status === "completed") {
-              return <GenerationCard key={gen.id} generation={gen} />;
-            }
-            // Show custom active state similar to profile popup
-            return (
-              <GeneratingCard
-                key={gen.id}
-                generation={gen}
-                isLatestActive={i === 0}
-              />
-            );
-          })}
+          {visibleGenerations.map(renderGenerationItem)}
         </AnimatePresence>
       </div>
     </div>
