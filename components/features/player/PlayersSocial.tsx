@@ -9,7 +9,7 @@ interface PlayersSocialProps {
 const PlayersSocial = ({ version, size = "md" }: PlayersSocialProps) => {
   const iconSize = size === "sm" ? 5 : size === "md" ? 7 : 10;
   return (
-    <div className="absolute right-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2 pr-2 bg-linear-to-l from-bg-card to-bg-card/70 py-6 duration-500">
+    <div className="absolute right-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2 pr-2 bg-linear-to-l from-bg-card to-bg-card/70 py-5 duration-500">
       <div className="flex items-center gap-5">
         <IconButton
           icon={<ThumbsUp className={`w-${iconSize} h-${iconSize}`} />}

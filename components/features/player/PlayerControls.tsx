@@ -18,8 +18,8 @@ export function PlayerControls({
   onClose,
 }: PlayerControlsProps) {
   return (
-    <div className="flex flex-col items-center gap-2 w-1/3 min-w-[240px]">
-      <div className="flex items-center gap-6 relative">
+    <div className="flex flex-col items-center gap-2 w-full md:w-1/3 md:min-w-[240px]">
+      <div className="flex items-center gap-4 md:gap-6 relative">
         <IconButton
           icon={<SkipBack className="w-5 h-5" />}
           label="Previous track"

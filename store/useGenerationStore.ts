@@ -9,7 +9,9 @@ export const useGenerationStore = create<GenerationStore>()(
       isProfileOpen: false,
       activeTrack: null,
       isPlaying: false,
+      isMobileMenuOpen: false,
       notification: null,
+      unseenCount: 0,
 
       addGeneration: (prompt: string) => {
         // We generate ID client-side to be optimistic and consistent
@@ -49,18 +51,36 @@ export const useGenerationStore = create<GenerationStore>()(
         )
       })),
 
-      toggleProfile: () => set((state) => ({ isProfileOpen: !state.isProfileOpen })),
-      closeProfile: () => set({ isProfileOpen: false }),
+      removeGeneration: (id) => set((state) => ({
+        generations: state.generations.filter((g) => g.id !== id)
+      })),
+
+      toggleProfile: () => set((state) => {
+        const isOpen = !state.isProfileOpen;
+        return {
+          isProfileOpen: isOpen,
+          ...(isOpen ? {} : { unseenCount: 0 })
+        };
+      }),
+      closeProfile: () => set({ isProfileOpen: false, unseenCount: 0 }),
 
       playTrack: (track) => set({ activeTrack: track, isPlaying: true }),
       togglePlay: () => set((state) => ({ isPlaying: !state.isPlaying })),
       closePlayer: () => set({ activeTrack: null, isPlaying: false }),
+
+      toggleMobileMenu: () =>
+        set((state) => ({ isMobileMenuOpen: !state.isMobileMenuOpen })),
+      closeMobileMenu: () => set({ isMobileMenuOpen: false }),
 
       showNotification: (notification) => {
         set({ notification });
         setTimeout(() => set({ notification: null }), 5000);
       },
       hideNotification: () => set({ notification: null }),
+
+      incrementUnseenCount: () =>
+        set((state) => ({ unseenCount: state.unseenCount + 1 })),
+      clearUnseenCount: () => set({ unseenCount: 0 }),
 
       // Prompt Box State
       prompt: '',

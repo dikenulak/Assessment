@@ -9,10 +9,10 @@ export function PlayerTrackInfo({ track }: PlayerTrackInfoProps) {
   if (!track) return null;
 
   return (
-    <div className="flex items-center gap-4 w-1/3 min-w-[200px]">
+    <div className="flex items-center gap-2 md:gap-4 w-auto max-w-[140px] md:max-w-none md:w-1/3 md:min-w-[200px]">
       <div
         className={cn(
-          "w-14 h-14 rounded-md overflow-hidden bg-linear-to-br from-accent-purple to-accent-pink shrink-0 animate-pulse-slow subpixel-antialiased",
+          "w-10 h-10 md:w-14 md:h-14 rounded-md overflow-hidden bg-linear-to-br from-accent-purple to-accent-pink shrink-0 animate-pulse-slow subpixel-antialiased",
         )}
       >
         {/* Placeholder for artwork using gradient from track if available */}

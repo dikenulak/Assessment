@@ -5,6 +5,7 @@ import Sidebar from "@/components/layout/Sidebar";
 import TopBar from "@/components/layout/TopBar";
 import ProfilePopup from "@/components/features/profile/ProfilePopup";
 import FloatingPlayer from "@/components/layout/FloatingPlayer";
+import MobileMenu from "@/components/layout/MobileMenu";
 import Notification from "@/components/shared/Notification";
 
 // Mocking Geist font by using Inter or sans-serif for now, as Geist is a specific Vercel font package.
@@ -31,6 +32,7 @@ export default function RootLayout({
       >
         <main className="flex min-h-screen">
           <Sidebar />
+          <MobileMenu />
           <section className="flex-1 md:ml-50 relative min-h-screen w-full h-full p-4">
             <TopBar />
             <ProfilePopup />

@@ -49,7 +49,7 @@ export default function GenerationCard({
       layout
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="group relative px-2 py-3 rounded-2xl transition-all duration-500 hover:bg-[#1A1A1A] max-w-3xl"
+      className="group relative px-2 py-2 rounded-2xl transition-all duration-500 hover:bg-[#1A1A1A] max-w-3xl"
     >
       <div className="flex items-center gap-4 relative z-10">
         {/* Thumbnail / Play Button */}
