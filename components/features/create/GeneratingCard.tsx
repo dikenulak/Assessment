@@ -13,11 +13,7 @@ export default function GeneratingCard({
   generation,
   isLatestActive = false,
 }: GeneratingCardProps) {
-  let statusText = "Generating";
-  if (generation.progress < 20) statusText = "Starting AI audio engine";
-  else if (generation.progress < 50) statusText = "Analyzing prompt...";
-  else if (generation.progress < 80) statusText = "Mixing audio...";
-  else statusText = "Finalizing master...";
+  const statusText = generation.statusText ?? "Generating...";
 
   const promptSplitIdx = Math.min(generation.prompt.length, 30);
   const promptShort = generation.prompt.substring(0, promptSplitIdx);

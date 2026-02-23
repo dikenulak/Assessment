@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/layout/Sidebar";
@@ -17,7 +17,12 @@ export const metadata: Metadata = {
     "Generate production-grade music, beats, and soundscapes using the world's most advanced AI audio model.",
   keywords: ["AI Music", "Music Generator", "AI Audio", "Music Production"],
   authors: [{ name: "MusicGPT Team" }],
-  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 export default function RootLayout({

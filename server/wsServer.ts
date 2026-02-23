@@ -20,26 +20,47 @@ export async function simulateGeneration(io: Server, id: string, version: string
   const shouldFail = Math.random() < 0.15; // 15% failure rate
   const failureReason = Math.random() > 0.5 ? "server_busy" : "invalid_prompt";
 
-  const emit = (event: string, data: EmitPayload) => {
+  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  /**
+   * Wait until the client has joined the gen:<id> room, so we never fire
+   * progress events into an empty room. Polls every 50ms, times out after
+   * 3s and falls back to broadcasting so events are never silently dropped.
+   */
+  const waitForRoom = async (maxWaitMs = 3000, pollMs = 50): Promise<boolean> => {
+    const deadline = Date.now() + maxWaitMs;
+    while (Date.now() < deadline) {
+      const room = io.sockets.adapter.rooms.get(`gen:${id}`);
+      if (room && room.size > 0) return true;
+      await delay(pollMs);
+    }
+    return false; // timed out — fall back to broadcast
+  };
+
+  const emit = (event: string, data: EmitPayload, forceRoomJoined = false) => {
     const room = io.sockets.adapter.rooms.get(`gen:${id}`);
     if (room && room.size > 0) {
       // Targeted: only sockets in the generation room
       io.to(`gen:${id}`).emit(event, data);
     } else {
-      // Fallback: broadcast (for GENERATION_START before client joins room)
+      // Fallback: broadcast (handles edge cases where room is still empty)
       io.emit(event, data);
     }
   };
 
-  // Notify client that generation has started
+  // Notify client that generation has started (broadcast, client may not be in room yet)
   emit(EVENTS.GENERATION_START, { id, version, status: "generating" });
-
-  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
   if (shouldFail) {
     await delay(Math.random() * 2000 + 500);
     emit(EVENTS.GENERATION_FAILED, { id, reason: failureReason });
     return;
+  }
+
+  // Wait for the client to join before firing progress events
+  const clientJoined = await waitForRoom();
+  if (!clientJoined) {
+    console.warn(`[WS] gen:${id} — client never joined room, falling back to broadcast for progress events`);
   }
 
   const steps = [

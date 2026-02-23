@@ -19,6 +19,7 @@ export interface Generation {
   trackTitle?: string;         // set on completion
   duration?: string;           // e.g. "3:42"
   audioUrl?: string;           // simulated
+  statusText?: string;         // human-readable progress label from server
 }
 
 export interface Notification {

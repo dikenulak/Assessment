@@ -39,8 +39,8 @@ export function useWebSocket() {
       socket.emit('join_generation', id);
     }
 
-    function onProgress({ id, progress }: { id: string; progress: number; status: string }) {
-      updateGeneration(id, { progress, status: 'generating' });
+    function onProgress({ id, progress, status }: { id: string; progress: number; status: string }) {
+      updateGeneration(id, { progress, status: 'generating', statusText: status });
     }
 
     function onComplete({ id, trackTitle, duration, audioUrl }: { id: string; trackTitle: string; duration: string; audioUrl: string }) {
